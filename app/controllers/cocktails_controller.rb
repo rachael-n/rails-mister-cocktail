@@ -1,10 +1,10 @@
 class CocktailsController < ApplicationController
+  before_action :set_params, only: :show
   def index
-    @cocktails = Cocktail.all
+    @cocktails = Cocktail.all.sort_by { |cocktail| cocktail.name }
   end
 
   def show
-    @cocktail = Cocktail.find(params[:id])
     @doses = @cocktail.doses
     @ingredients = @cocktail.ingredients
   end
@@ -22,7 +22,13 @@ class CocktailsController < ApplicationController
     end
   end
 
+  private
+
   def cocktail_params
-      params.require(:cocktail).permit(:name)
-    end
+    params.require(:cocktail).permit(:name)
+  end
+
+  def set_params
+    @cocktail = Cocktail.find(params[:id])
+  end
 end
